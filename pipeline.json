@@ -1,0 +1,67 @@
+{
+    "name": "LogFilesInFolder",
+    "properties": {
+        "activities": [
+            {
+                "name": "GetMetadataFolder",
+                "type": "GetMetadata",
+                "typeProperties": {
+                    "dataset": {
+                        "referenceName": "YourBlobFolderDataset",
+                        "type": "DatasetReference"
+                    },
+                    "fieldList": [
+                        "childItems"
+                    ]
+                }
+            },
+            {
+                "name": "ForEachFile",
+                "type": "ForEach",
+                "typeProperties": {
+                    "items": "@activity('GetMetadataFolder').output.childItems",
+                    "activities": [
+                        {
+                            "name": "GetMetadataFile",
+                            "type": "GetMetadata",
+                            "typeProperties": {
+                                "dataset": {
+                                    "referenceName": "YourBlobFileDataset",
+                                    "type": "DatasetReference"
+                                },
+                                "fieldList": [
+                                    "name"
+                                ]
+                            }
+                        },
+                        {
+                            "name": "LogFileName",
+                            "type": "SqlServerStoredProcedure",
+                            "dependsOn": [
+                                {
+                                    "activity": "GetMetadataFile",
+                                    "dependencyConditions": [
+                                        "Succeeded"
+                                    ]
+                                }
+                            ],
+                            "typeProperties": {
+                                "storedProcedureName": "LogFileName",
+                                "storedProcedureParameters": {
+                                    "FileName": {
+                                        "value": "@item().name",
+                                        "type": "String"
+                                    }
+                                }
+                            },
+                            "linkedServiceName": {
+                                "referenceName": "AzureSqlDatabaseLinkedService",
+                                "type": "LinkedServiceReference"
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}
