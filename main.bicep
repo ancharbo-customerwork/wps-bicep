@@ -3,14 +3,14 @@ param appserviceplanname string = 'msp${uniqueString(resourceGroup().id)}'
 param keyVaultName string = 'mkv${uniqueString(resourceGroup().id)}'
 param location string = resourceGroup().location
 
-module storageModule 'br/myRegistry:storage:v2' = {
+module storageModule 'br/myRegistry:storage:v1' = {
   name: 'storageModuleDeployment'
   params: {
     storageAccountName: storageAccountName
     location: location
   }
 }
-module appServicePlanModule 'br:bicep0614.azurecr.io/bicep/modules/appserviceplan:v3' = {
+module appServicePlanModule 'br:bicep0wps.azurecr.io/bicep/modules/appserviceplan:v1' = {
   name: 'appServicePlanDeployment'
   params: {
     appserviceplanname: appserviceplanname
@@ -18,7 +18,7 @@ module appServicePlanModule 'br:bicep0614.azurecr.io/bicep/modules/appservicepla
   }
 }
 
-module keyVaultModule 'br:bicep0614.azurecr.io/bicep/modules/keyvault:v1' = {
+module keyVaultModule 'br:bicep0wps.azurecr.io/bicep/modules/keyvault:v1' = {
   name: 'keyVaultDeployment'
   params: {
     keyVaultName: keyVaultName

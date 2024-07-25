@@ -2,7 +2,7 @@
     "moduleAliases": {
       "br": {
         "myRegistry": {
-          "registry": "bicep0614.azurecr.io",
+          "registry": "bicep0wps.azurecr.io",
           "modulePath": "bicep/modules"
         }
       }
